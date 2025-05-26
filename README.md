@@ -706,3 +706,239 @@ multi_clf.fit(X, y_multioutput)  # y has shape (n_samples, n_targets)
 multi_reg = MultiOutputRegressor(RandomForestRegressor())
 multi_reg.fit(X, y_multioutput)
 ```
+
+## 1. Data Preprocessing
+
+| Function/Class | Purpose | Example Usage | Key Parameters |
+|---|---|---|---|
+| `StandardScaler` | Standardize features (mean=0, std=1) | `scaler = StandardScaler().fit(X_train)` | `with_mean`, `with_std` |
+| `MinMaxScaler` | Scale features to [0,1] range | `scaler = MinMaxScaler().fit_transform(X)` | `feature_range` |
+| `RobustScaler` | Scale using median and IQR | `scaler = RobustScaler().fit(X)` | `quantile_range` |
+| `LabelEncoder` | Encode categorical labels | `le = LabelEncoder().fit_transform(y)` | - |
+| `OneHotEncoder` | One-hot encode categorical features | `ohe = OneHotEncoder().fit_transform(X)` | `drop`, `sparse` |
+| `LabelBinarizer` | Binarize labels | `lb = LabelBinarizer().fit_transform(y)` | `neg_label`, `pos_label` |
+| `PolynomialFeatures` | Generate polynomial features | `poly = PolynomialFeatures(2).fit_transform(X)` | `degree`, `include_bias` |
+| `SimpleImputer` | Fill missing values | `imp = SimpleImputer(strategy='mean').fit_transform(X)` | `strategy`, `fill_value` |
+| `KNNImputer` | Impute using k-nearest neighbors | `imp = KNNImputer(n_neighbors=5).fit_transform(X)` | `n_neighbors`, `weights` |
+
+## 2. Feature Selection
+
+| Function/Class | Purpose | Example Usage | Key Parameters |
+|---|---|---|---|
+| `SelectKBest` | Select k best features | `selector = SelectKBest(f_classif, k=10).fit(X, y)` | `score_func`, `k` |
+| `SelectPercentile` | Select top percentile features | `selector = SelectPercentile(f_regression, 50).fit(X, y)` | `score_func`, `percentile` |
+| `RFE` | Recursive feature elimination | `rfe = RFE(estimator, n_features=5).fit(X, y)` | `estimator`, `n_features_to_select` |
+| `RFECV` | RFE with cross-validation | `rfecv = RFECV(estimator, cv=5).fit(X, y)` | `estimator`, `cv`, `scoring` |
+| `SelectFromModel` | Select based on feature importance | `selector = SelectFromModel(RandomForestClassifier()).fit(X, y)` | `estimator`, `threshold` |
+| `VarianceThreshold` | Remove low variance features | `selector = VarianceThreshold(0.1).fit_transform(X)` | `threshold` |
+
+## 3. Classification Algorithms
+
+| Algorithm | Class | Example Usage | Key Parameters | Use Case |
+|---|---|---|---|---|
+| Logistic Regression | `LogisticRegression` | `LogisticRegression(C=1.0).fit(X, y)` | `C`, `penalty`, `solver` | Binary/multiclass, linear boundaries |
+| Decision Tree | `DecisionTreeClassifier` | `DecisionTreeClassifier(max_depth=5).fit(X, y)` | `max_depth`, `min_samples_split`, `criterion` | Interpretable, non-linear |
+| Random Forest | `RandomForestClassifier` | `RandomForestClassifier(n_estimators=100).fit(X, y)` | `n_estimators`, `max_depth`, `max_features` | Ensemble, handles overfitting |
+| Gradient Boosting | `GradientBoostingClassifier` | `GradientBoostingClassifier(n_estimators=100).fit(X, y)` | `n_estimators`, `learning_rate`, `max_depth` | High performance, sequential learning |
+| SVM | `SVC` | `SVC(kernel='rbf', C=1.0).fit(X, y)` | `C`, `kernel`, `gamma` | High-dimensional data, kernel trick |
+| K-Nearest Neighbors | `KNeighborsClassifier` | `KNeighborsClassifier(n_neighbors=5).fit(X, y)` | `n_neighbors`, `weights`, `metric` | Instance-based, simple |
+| Naive Bayes | `GaussianNB` | `GaussianNB().fit(X, y)` | `var_smoothing` | Fast, assumes feature independence |
+| AdaBoost | `AdaBoostClassifier` | `AdaBoostClassifier(n_estimators=50).fit(X, y)` | `n_estimators`, `learning_rate`, `base_estimator` | Boosting weak learners |
+| Extra Trees | `ExtraTreesClassifier` | `ExtraTreesClassifier(n_estimators=100).fit(X, y)` | `n_estimators`, `max_depth` | Extreme randomization |
+
+## 4. Regression Algorithms
+
+| Algorithm | Class | Example Usage | Key Parameters | Use Case |
+|---|---|---|---|---|
+| Linear Regression | `LinearRegression` | `LinearRegression().fit(X, y)` | `fit_intercept`, `normalize` | Simple linear relationships |
+| Ridge Regression | `Ridge` | `Ridge(alpha=1.0).fit(X, y)` | `alpha`, `solver` | L2 regularization |
+| Lasso Regression | `Lasso` | `Lasso(alpha=1.0).fit(X, y)` | `alpha`, `max_iter` | L1 regularization, feature selection |
+| Elastic Net | `ElasticNet` | `ElasticNet(alpha=1.0, l1_ratio=0.5).fit(X, y)` | `alpha`, `l1_ratio` | L1 + L2 regularization |
+| Decision Tree | `DecisionTreeRegressor` | `DecisionTreeRegressor(max_depth=5).fit(X, y)` | `max_depth`, `min_samples_split` | Non-linear relationships |
+| Random Forest | `RandomForestRegressor` | `RandomForestRegressor(n_estimators=100).fit(X, y)` | `n_estimators`, `max_depth` | Ensemble regression |
+| Gradient Boosting | `GradientBoostingRegressor` | `GradientBoostingRegressor(n_estimators=100).fit(X, y)` | `n_estimators`, `learning_rate` | High performance regression |
+| SVR | `SVR` | `SVR(kernel='rbf', C=1.0).fit(X, y)` | `C`, `kernel`, `epsilon` | Support Vector Regression |
+| K-Nearest Neighbors | `KNeighborsRegressor` | `KNeighborsRegressor(n_neighbors=5).fit(X, y)` | `n_neighbors`, `weights` | Instance-based regression |
+
+## 5. Clustering Algorithms
+
+| Algorithm | Class | Example Usage | Key Parameters | Use Case |
+|---|---|---|---|---|
+| K-Means | `KMeans` | `KMeans(n_clusters=3).fit(X)` | `n_clusters`, `init`, `n_init` | Spherical clusters |
+| Hierarchical | `AgglomerativeClustering` | `AgglomerativeClustering(n_clusters=3).fit(X)` | `n_clusters`, `linkage`, `affinity` | Hierarchical structure |
+| DBSCAN | `DBSCAN` | `DBSCAN(eps=0.5, min_samples=5).fit(X)` | `eps`, `min_samples` | Density-based, handles noise |
+| Gaussian Mixture | `GaussianMixture` | `GaussianMixture(n_components=3).fit(X)` | `n_components`, `covariance_type` | Probabilistic clustering |
+| Mean Shift | `MeanShift` | `MeanShift(bandwidth=1.0).fit(X)` | `bandwidth` | Automatic cluster detection |
+| Spectral Clustering | `SpectralClustering` | `SpectralClustering(n_clusters=3).fit(X)` | `n_clusters`, `affinity` | Non-convex clusters |
+| Birch | `Birch` | `Birch(n_clusters=3).fit(X)` | `n_clusters`, `threshold` | Large datasets |
+
+## 6. Dimensionality Reduction
+
+| Technique | Class | Example Usage | Key Parameters | Purpose |
+|---|---|---|---|---|
+| PCA | `PCA` | `PCA(n_components=2).fit_transform(X)` | `n_components`, `whiten` | Linear dimensionality reduction |
+| t-SNE | `TSNE` | `TSNE(n_components=2).fit_transform(X)` | `n_components`, `perplexity` | Non-linear visualization |
+| LDA | `LinearDiscriminantAnalysis` | `LDA(n_components=2).fit_transform(X, y)` | `n_components`, `solver` | Supervised dimensionality reduction |
+| ICA | `FastICA` | `FastICA(n_components=2).fit_transform(X)` | `n_components`, `algorithm` | Independent component analysis |
+| Factor Analysis | `FactorAnalysis` | `FactorAnalysis(n_components=2).fit_transform(X)` | `n_components`, `rotation` | Latent factor modeling |
+| Truncated SVD | `TruncatedSVD` | `TruncatedSVD(n_components=2).fit_transform(X)` | `n_components`, `algorithm` | Sparse matrices |
+| UMAP | `UMAP` | `UMAP(n_components=2).fit_transform(X)` | `n_components`, `n_neighbors` | Uniform manifold approximation |
+
+## 7. Model Selection & Validation
+
+| Function/Class | Purpose | Example Usage | Key Parameters |
+|---|---|---|---|
+| `train_test_split` | Split data into train/test sets | `X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)` | `test_size`, `random_state`, `stratify` |
+| `cross_val_score` | Cross-validation scoring | `scores = cross_val_score(model, X, y, cv=5)` | `cv`, `scoring`, `n_jobs` |
+| `GridSearchCV` | Grid search hyperparameters | `grid = GridSearchCV(model, param_grid, cv=5).fit(X, y)` | `param_grid`, `cv`, `scoring` |
+| `RandomizedSearchCV` | Randomized hyperparameter search | `random = RandomizedSearchCV(model, param_dist, cv=5).fit(X, y)` | `param_distributions`, `n_iter`, `cv` |
+| `validation_curve` | Plot validation curves | `train_scores, val_scores = validation_curve(model, X, y, param_name, param_range)` | `param_name`, `param_range`, `cv` |
+| `learning_curve` | Plot learning curves | `train_sizes, train_scores, val_scores = learning_curve(model, X, y)` | `train_sizes`, `cv`, `scoring` |
+| `StratifiedKFold` | Stratified k-fold CV | `skf = StratifiedKFold(n_splits=5)` | `n_splits`, `shuffle`, `random_state` |
+| `KFold` | K-fold cross-validation | `kf = KFold(n_splits=5)` | `n_splits`, `shuffle`, `random_state` |
+
+## 8. Evaluation Metrics
+
+### Classification Metrics
+| Metric | Function | Example Usage | Purpose |
+|---|---|---|---|
+| Accuracy | `accuracy_score` | `accuracy_score(y_true, y_pred)` | Overall correctness |
+| Precision | `precision_score` | `precision_score(y_true, y_pred, average='macro')` | True positives / (TP + FP) |
+| Recall | `recall_score` | `recall_score(y_true, y_pred, average='macro')` | True positives / (TP + FN) |
+| F1-Score | `f1_score` | `f1_score(y_true, y_pred, average='macro')` | Harmonic mean of precision/recall |
+| ROC AUC | `roc_auc_score` | `roc_auc_score(y_true, y_proba)` | Area under ROC curve |
+| Confusion Matrix | `confusion_matrix` | `confusion_matrix(y_true, y_pred)` | Classification matrix |
+| Classification Report | `classification_report` | `classification_report(y_true, y_pred)` | Comprehensive metrics |
+| Log Loss | `log_loss` | `log_loss(y_true, y_proba)` | Logarithmic loss |
+
+### Regression Metrics
+| Metric | Function | Example Usage | Purpose |
+|---|---|---|---|
+| MAE | `mean_absolute_error` | `mean_absolute_error(y_true, y_pred)` | Mean absolute error |
+| MSE | `mean_squared_error` | `mean_squared_error(y_true, y_pred)` | Mean squared error |
+| RMSE | `mean_squared_error` | `np.sqrt(mean_squared_error(y_true, y_pred))` | Root mean squared error |
+| R² Score | `r2_score` | `r2_score(y_true, y_pred)` | Coefficient of determination |
+| Explained Variance | `explained_variance_score` | `explained_variance_score(y_true, y_pred)` | Explained variance |
+| Median AE | `median_absolute_error` | `median_absolute_error(y_true, y_pred)` | Median absolute error |
+
+### Clustering Metrics
+| Metric | Function | Example Usage | Purpose |
+|---|---|---|---|
+| Adjusted Rand Index | `adjusted_rand_score` | `adjusted_rand_score(y_true, y_pred)` | Similarity measure |
+| Silhouette Score | `silhouette_score` | `silhouette_score(X, labels)` | Cluster quality |
+| Homogeneity | `homogeneity_score` | `homogeneity_score(y_true, y_pred)` | Cluster purity |
+| Completeness | `completeness_score` | `completeness_score(y_true, y_pred)` | All members assigned |
+| V-Measure | `v_measure_score` | `v_measure_score(y_true, y_pred)` | Harmonic mean of homogeneity/completeness |
+
+## 9. Pipeline and Composition
+
+| Class/Function | Purpose | Example Usage | Key Parameters |
+|---|---|---|---|
+| `Pipeline` | Chain transformers and estimators | `pipe = Pipeline([('scaler', StandardScaler()), ('clf', LogisticRegression())])` | `steps` |
+| `ColumnTransformer` | Apply different transformers to columns | `ct = ColumnTransformer([('num', StandardScaler(), num_cols), ('cat', OneHotEncoder(), cat_cols)])` | `transformers`, `remainder` |
+| `FeatureUnion` | Combine multiple transformers | `union = FeatureUnion([('pca', PCA()), ('select', SelectKBest())])` | `transformer_list` |
+| `make_pipeline` | Create pipeline without naming | `pipe = make_pipeline(StandardScaler(), LogisticRegression())` | `*steps` |
+| `make_union` | Create feature union without naming | `union = make_union(PCA(), SelectKBest())` | `*transformers` |
+
+## 10. Ensemble Methods
+
+| Method | Class | Example Usage | Key Parameters | Technique |
+|---|---|---|---|---|
+| Voting Classifier | `VotingClassifier` | `VotingClassifier([('lr', LogisticRegression()), ('rf', RandomForestClassifier())], voting='soft')` | `estimators`, `voting` | Combine multiple classifiers |
+| Voting Regressor | `VotingRegressor` | `VotingRegressor([('lr', LinearRegression()), ('rf', RandomForestRegressor())])` | `estimators`, `weights` | Combine multiple regressors |
+| Bagging Classifier | `BaggingClassifier` | `BaggingClassifier(base_estimator=DecisionTreeClassifier(), n_estimators=10)` | `base_estimator`, `n_estimators` | Bootstrap aggregating |
+| Bagging Regressor | `BaggingRegressor` | `BaggingRegressor(base_estimator=DecisionTreeRegressor(), n_estimators=10)` | `base_estimator`, `n_estimators` | Bootstrap aggregating |
+| Stacking Classifier | `StackingClassifier` | `StackingClassifier([('lr', LogisticRegression()), ('rf', RandomForestClassifier())], final_estimator=LogisticRegression())` | `estimators`, `final_estimator`, `cv` | Stack predictions |
+| Stacking Regressor | `StackingRegressor` | `StackingRegressor([('lr', LinearRegression()), ('rf', RandomForestRegressor())], final_estimator=LinearRegression())` | `estimators`, `final_estimator`, `cv` | Stack predictions |
+
+## 11. Common Workflows
+
+### Basic Classification Workflow
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Scale features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Train model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train_scaled, y_train)
+
+# Evaluate
+y_pred = model.predict(X_test_scaled)
+print(classification_report(y_test, y_pred))
+```
+
+### Cross-Validation with Pipeline
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import cross_val_score
+
+# Create pipeline
+pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('classifier', RandomForestClassifier())
+])
+
+# Cross-validate
+scores = cross_val_score(pipe, X, y, cv=5, scoring='accuracy')
+print(f"CV Accuracy: {scores.mean():.3f} (+/- {scores.std() * 2:.3f})")
+```
+
+### Hyperparameter Tuning
+```python
+from sklearn.model_selection import GridSearchCV
+
+# Define parameter grid
+param_grid = {
+    'classifier__n_estimators': [50, 100, 200],
+    'classifier__max_depth': [3, 5, 7, None]
+}
+
+# Grid search
+grid_search = GridSearchCV(pipe, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+grid_search.fit(X_train, y_train)
+
+print(f"Best parameters: {grid_search.best_params_}")
+print(f"Best CV score: {grid_search.best_score_:.3f}")
+```
+
+## 12. Tips and Best Practices
+
+### Data Preprocessing
+- Always split data before preprocessing to avoid data leakage
+- Use `fit` on training data, `transform` on both training and test data
+- Handle missing values before scaling
+- Consider feature engineering for better performance
+
+### Model Selection
+- Start with simple models (LogisticRegression, DecisionTree)
+- Use cross-validation for robust performance estimates
+- Consider ensemble methods for improved performance
+- Balance model complexity with interpretability needs
+
+### Hyperparameter Tuning
+- Use RandomizedSearchCV for large parameter spaces
+- Set `n_jobs=-1` to use all CPU cores
+- Use appropriate scoring metrics for your problem
+- Consider early stopping for iterative algorithms
+
+### Evaluation
+- Use stratified sampling for imbalanced datasets
+- Report multiple metrics (precision, recall, F1)
+- Use confusion matrices to understand error patterns
+- Validate on truly unseen data for final assessment
+
+### Performance Optimization
+- Use `n_jobs=-1` for parallel processing where available
+- Consider memory usage with large datasets
+- Use sparse matrices for high-dimensional sparse data
+- Profile code to identify bottlenecks
